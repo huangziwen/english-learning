@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="英语学习">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#4f46e5">
+  <title>English Learning Platform - 英语学习平台</title>
+  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%234f46e5'/><text x='90' y='125' font-size='90' text-anchor='middle'>📚</text></svg>">
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="app-logo" id="appLogo">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">English Learning Platform</span>
+      </div>
+      <div class="header-stats">
+        <div class="header-stat">
+          <span class="stat-icon">✅</span>
+          <span>已完成</span>
+          <span class="stat-value" id="statCompleted">0/0</span>
+        </div>
+        <div class="header-stat">
+          <span class="stat-icon">🔥</span>
+          <span>连续学习</span>
+          <span class="stat-value" id="statStreak">0 天</span>
+        </div>
+      </div>
+    </div>
+    <div class="global-progress">
+      <span class="progress-label">总体进度</span>
+      <div class="progress-track">
+        <div class="progress-fill"></div>
+      </div>
+      <span class="progress-percent">0%</span>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="app-main" id="appMain">
+    <!-- Content rendered by app.js -->
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="data.js?v=7"></script>
+  <script src="video-analysis.js?v=7"></script>
+  <script src="sentence-analysis.js?v=7"></script>
+  <script src="app.js?v=7"></script>
+</body>
+</html>

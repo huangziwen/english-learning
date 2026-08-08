@@ -1,0 +1,9 @@
+{
+  "name": "english-learning-platform",
+  "version": "1.0.0",
+  "description": "英语学习平台 - 视频解析单元测试",
+  "scripts": {
+    "test": "node tests/video-analysis.test.js",
+    "test:verbose": "node tests/video-analysis.test.js --verbose"
+  }
+}

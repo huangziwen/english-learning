@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>扫码访问 - 英语学习平台</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4f46e5;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --ink: #1e293b;
+      --muted: #94a3b8;
+      --border: #e2e8f0;
+      --success: #10b981;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans CJK SC',
+        'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .qr-card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .qr-icon { font-size: 2.5rem; margin-bottom: 0.3rem; }
+
+    .qr-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+    }
+
+    .qr-subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.6;
+    }
+
+    .qr-code-container {
+      display: inline-block;
+      padding: 0.85rem;
+      background: white;
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      margin-bottom: 1.25rem;
+    }
+
+    .qr-code-container img {
+      display: block;
+      width: 220px;
+      height: 220px;
+    }
+
+    .qr-url-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.65rem 0.9rem;
+      margin-bottom: 1.25rem;
+      word-break: break-all;
+    }
+
+    .qr-url-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .qr-url-value {
+      font-size: 0.78rem;
+      color: var(--ink);
+      font-family: 'Courier New', monospace;
+    }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 0.55rem 1.4rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.25s;
+      margin-bottom: 1.75rem;
+    }
+
+    .copy-btn:hover { background: #3730a3; transform: scale(1.05); }
+
+    .steps {
+      text-align: left;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+
+    .steps h3 {
+      font-size: 0.88rem;
+      color: var(--ink);
+      margin-bottom: 0.65rem;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      font-size: 0.82rem;
+      color: #475569;
+      margin-bottom: 0.5rem;
+      line-height: 1.55;
+    }
+
+    .step:last-child { margin-bottom: 0; }
+
+    .step-num {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.68rem; font-weight: 700;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--success); color: white;
+      padding: 0.55rem 1.4rem; border-radius: 999px;
+      font-size: 0.85rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 100;
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .open-platform {
+      display: inline-block;
+      margin-top: 0.75rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .open-platform:hover { text-decoration: underline; }
+
+    .offline-hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="qr-card">
+    <div class="qr-icon">📱</div>
+    <div class="qr-title">扫码访问英语学习平台</div>
+    <div class="qr-subtitle">用手机或平板摄像头扫描下方二维码<br>即可在移动设备上打开</div>
+
+    <div class="qr-code-container">
+      <img id="qrImg" alt="QR Code" src="">
+    </div>
+    <div class="offline-hint" id="offlineHint" style="display:none;">二维码加载中，请稍候...</div>
+
+    <div class="qr-url-box">
+      <div class="qr-url-label">访问地址</div>
+      <div class="qr-url-value" id="urlValue">加载中...</div>
+    </div>
+
+    <button class="copy-btn" id="copyBtn">📋 复制链接</button>
+
+    <div class="steps">
+      <h3>📲 使用步骤</h3>
+      <div class="step">
+        <span class="step-num">1</span>
+        <span>打开手机或平板的相机/扫码应用</span>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <span>将摄像头对准上方二维码进行扫描</span>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <span>点击弹出的链接，在浏览器中打开平台</span>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <span>建议「添加到主屏幕」，获得类似 App 的体验</span>
+      </div>
+    </div>
+
+    <a href="./index.html" class="open-platform">在电脑端打开平台 →</a>
+  </div>
+
+  <div class="toast" id="toast">链接已复制到剪贴板</div>
+
+  <script>
+    (function() {
+      // 获取当前页面的基础 URL（去掉 qrcode.html，指向平台根目录）
+      var currentUrl = window.location.href;
+      var baseUrl = currentUrl.replace(/qrcode\.html.*$/, '') + 'index.html';
+
+      // 显示 URL
+      document.getElementById('urlValue').textContent = baseUrl;
+
+      // 使用 qrserver.com API 生成二维码
+      var qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=2&data=' + encodeURIComponent(baseUrl);
+      var qrImg = document.getElementById('qrImg');
+      qrImg.src = qrApiUrl;
+      qrImg.onerror = function() {
+        document.getElementById('offlineHint').style.display = 'block';
+        document.getElementById('offlineHint').textContent = '二维码图片加载失败，请直接复制下方链接到手机浏览器打开';
+      };
+      qrImg.onload = function() {
+        document.getElementById('offlineHint').style.display = 'none';
+      };
+
+      // 复制按钮
+      var copyBtn = document.getElementById('copyBtn');
+      var toast = document.getElementById('toast');
+      copyBtn.addEventListener('click', function() {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(baseUrl).then(function() {
+            showToast('链接已复制到剪贴板');
+          }).catch(function() {
+            fallbackCopy(baseUrl);
+          });
+        } else {
+          fallbackCopy(baseUrl);
+        }
+      });
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 2500);
+      }
+
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast('链接已复制到剪贴板');
+        } catch (e) {
+          showToast('复制失败，请手动复制');
+        }
+        document.body.removeChild(ta);
+      }
+    })();
+  </script>
+</body>
+</html>
